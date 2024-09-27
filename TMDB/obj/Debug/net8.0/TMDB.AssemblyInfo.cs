@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TMDB")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7afef40ae8f33114320aa1e7f52766076d42692f")]
 [assembly: System.Reflection.AssemblyProductAttribute("TMDB")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TMDB")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

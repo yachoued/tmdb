@@ -1,42 +1,135 @@
 ﻿@page "/"
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+@rendermode InteractiveServer
 @inject IMovieService MovieService
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div>
+    <nav class="navbar navbar-expand-lg justify-content-between">
+        <div class="navbar-brand ml-3">
+            <img src="@UriHelper.ToAbsoluteUri($"logo/tmdb_logo.svg")" alt="logo" width="154" height="20">
+        </div>
+        <div class="mr-3">
+            <button class="btn custom-btn mr-2">Favorites</button>
+            <button class="btn custom-btn mr-2">Contact Us</button>
+            <button class="btn custom-btn">Log Out - johntheram</button>
+        </div>
+    </nav>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Release Date</th>
-            <th>Liked</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-     @foreach (var movie in movies)
-    {
-        <tr>
-            <td>@movie.Title</td>
-            <td>@movie.ReleaseDate.ToShortDateString()</td>
-            <td>@movie.IsLiked</td>
-        </tr>
-    } 
-    </tbody>
-</table>
+    <div class="input-group mt-4">
+        <input type="text" class="form-control" placeholder="Search" @bind="SearchTerm">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" @onclick="SearchMovies">
+                <i class="fas fa-search"></i> <!-- FontAwesome search icon -->
+            </button>
+        </div>
+    </div>
 
+    <h2 class="mt-4">Popular Movies</h2>
+
+    <div class="row">
+        @if (movies?.Any() == true)
+        {
+            @foreach (var movie in movies)
+            {
+                <div class="col-md-2 mb-4">
+                    <div class="card">
+                        <img src="@UriHelper.ToAbsoluteUri($"images/01.jpg")" class="card-img-top" alt="@movie.Title">
+                        <div class="card-body">
+                            <h5 class="card-title">@movie.Title</h5>
+                            <p class="card-text">@movie.ReleaseDate.ToShortDateString()</p>
+                            <button class="btn @(movie.IsLiked ? "btn-success" : "btn-primary") btn-sm">
+                                @(movie.IsLiked ? "Liked" : "Like")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No movies found.</p>
+        }
+    </div>
+</div>
+
+
+<style>
+/* Navbar background color */
+.navbar {
+    background-color: #0d253f;
+}
+
+/* Custom button styling */
+.custom-btn {
+    background-color: #01b4e4;
+    color: white;
+    border-color: #01b4e4;
+}
+
+/* Margin adjustments for the logo and buttons */
+.navbar-brand {
+    margin-left: 15px; /* Adjust the left margin for the logo */
+}
+
+.row{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+.navbar .mr-3 {
+    margin-right: 15px; /* Adjust the right margin after the last button */
+}
+
+/* Ensure the cards behave as required */
+.card {
+    transition: transform 0.2s;
+    height: 100%;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.card-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+</style>
 @code {
     public List<Movie> movies = new List<Movie>();
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+    public string SearchTerm { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        movies = await MovieService.GetAllMoviesAsync();
+        movies = await MovieService.GetAllMoviesAsync(); 
     }
+    private async Task SearchMovies()
+    {
+        if (!string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            movies = await MovieService.SearchMoviesAsync(SearchTerm);
+        }
+        else
+        {
+            movies = await MovieService.GetAllMoviesAsync();
+        }
+    }
+
+    private async Task OnSearchChanged(ChangeEventArgs e)
+    {
+        SearchTerm = e.Value?.ToString(); // Update the search term based on user input
+        await SearchMovies(); // Trigger the search when the input changes
+    } 
 }

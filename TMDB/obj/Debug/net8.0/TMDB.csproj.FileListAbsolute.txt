@@ -102,3 +102,4 @@
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.genruntimeconfig.cache
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/ref/TMDB.dll
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Dapper.dll
+/home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.sourcelink.json

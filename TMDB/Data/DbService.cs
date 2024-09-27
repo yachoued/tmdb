@@ -4,7 +4,6 @@ using Npgsql;
 
 public class DbService : IDbService
 {
-
     private readonly IDbConnection _db;
 
     public DbService(IConfiguration config)

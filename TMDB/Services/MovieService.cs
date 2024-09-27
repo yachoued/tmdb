@@ -26,9 +26,15 @@ public class MovieService : IMovieService
         throw new NotImplementedException();
     }
 
-    public Task<List<Movie>> SearchMoviesAsync(string searchTerm)
+    public async Task<List<Movie>> SearchMoviesAsync(string searchTerm)
     {
-        throw new NotImplementedException();
+         if (string.IsNullOrEmpty(searchTerm))
+        {
+            return await GetAllMoviesAsync();
+        }
+        var query = "SELECT * FROM public.movies WHERE title ILIKE '%' || @SearchTerm || '%'";
+        var movies = await _dbService.GetAll<Movie>(query, new { SearchTerm = searchTerm });
+        return movies;
     }
 
     public Task UpdateMovieAsync(Movie movie)

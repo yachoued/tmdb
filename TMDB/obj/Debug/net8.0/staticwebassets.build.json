@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BhriZXxqtV6vmQWKKxkpPlEhjhgP06oO+Y9n39o8j1w=",
+  "Hash": "e9St8w+vNauXF6rgC8HkkAvS5NfT2FYDUe+3CmO97Xo=",
   "Source": "TMDB",
   "BasePath": "_content/TMDB",
   "Mode": "Default",
@@ -129,6 +129,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/favicon.png"
+    },
+    {
+      "Identity": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/images/01.jpg",
+      "SourceId": "TMDB",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/",
+      "BasePath": "_content/TMDB",
+      "RelativePath": "images/01.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/01.jpg"
+    },
+    {
+      "Identity": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/logo/tmdb_logo.svg",
+      "SourceId": "TMDB",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/",
+      "BasePath": "_content/TMDB",
+      "RelativePath": "logo/tmdb_logo.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/logo/tmdb_logo.svg"
     }
   ]
 }

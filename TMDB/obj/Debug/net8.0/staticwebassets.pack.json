@@ -21,6 +21,14 @@
       "PackagePath": "staticwebassets/favicon.png"
     },
     {
+      "Id": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/images/01.jpg",
+      "PackagePath": "staticwebassets/images/01.jpg"
+    },
+    {
+      "Id": "/home/mohammedyachou/Desktop/Test/TMDB/wwwroot/logo/tmdb_logo.svg",
+      "PackagePath": "staticwebassets/logo/tmdb_logo.svg"
+    },
+    {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.TMDB.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
