@@ -1,0 +1,259 @@
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+@rendermode InteractiveServer
+@inject IMovieService MovieService
+@inject NavigationManager NavigationManager
+
+<div class="movie-form-container">
+    <EditForm Model="@movie" OnValidSubmit="HandleValidSubmit" FormName="movieForm" class="movie-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
+
+        <h2 class="form-title">@(movie.MovieId == 0 ? "Add New Movie" : "Edit Movie")</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="title" class="form-label">Title</label>
+                    <InputText id="title" @bind-Value="movie.Title" class="form-control" placeholder="Enter movie title" />
+                    <ValidationMessage For="@(() => movie.Title)" class="validation-message" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="releaseDate" class="form-label">Release Date</label>
+                    <InputDate id="releaseDate" @bind-Value="movie.ReleaseDate" class="form-control" />
+                    <ValidationMessage For="@(() => movie.ReleaseDate)" class="validation-message" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="posterImage" class="form-label">Poster Image</label>
+                    <InputFile OnChange="HandleFileSelected" accept=".jpg,.jpeg,.png" class="form-control-file" />
+                    <small class="form-text text-muted">Accepted formats: .jpg, .jpeg, .png</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @if (!string.IsNullOrEmpty(imageDataUrl)) 
+                {
+                    <div class="form-group">
+                        <label class="form-label">New Poster Preview</label>
+                        <img src="@imageDataUrl" alt="Poster Preview" class="img-preview" />
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(movie.PosterPath))
+                {
+                    <div class="form-group">
+                        <label class="form-label">Current Poster</label>
+                        <img src="@movie.PosterPath" alt="Current Poster" class="img-preview" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="runtime" class="form-label">Runtime (minutes)</label>
+                    <InputNumber id="runtime" @bind-Value="movie.Runtime" class="form-control" placeholder="Enter runtime in minutes" />
+                    <ValidationMessage For="@(() => movie.Runtime)" class="validation-message" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="language" class="form-label">Language</label>
+                    <InputText id="language" @bind-Value="movie.Language" class="form-control" placeholder="Enter movie language" />
+                    <ValidationMessage For="@(() => movie.Language)" class="validation-message" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="country" class="form-label">Country</label>
+                    <InputText id="country" @bind-Value="movie.Country" class="form-control" placeholder="Enter movie country" />
+                    <ValidationMessage For="@(() => movie.Country)" class="validation-message" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="trailerUrl" class="form-label">Trailer URL</label>
+                    <InputText id="trailerUrl" @bind-Value="movie.TrailerUrl" class="form-control" placeholder="Enter trailer URL" />
+                    <ValidationMessage For="@(() => movie.TrailerUrl)" class="validation-message" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="overview" class="form-label">Overview</label>
+                    <InputTextArea id="overview" @bind-Value="movie.Overview" class="form-control" rows="4" placeholder="Enter movie overview" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="rating" class="form-label">Rating</label>
+                    <InputNumber id="rating" @bind-Value="movie.Rating" class="form-control" placeholder="Rating from 1 to 10" />
+                    <ValidationMessage For="@(() => movie.Rating)" class="validation-message" />
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-primary flex-grow-1">Save Movie</button>
+            <button type="button" class="btn btn-outline-secondary flex-grow-1 ms-3" @onclick="Cancel">Cancel</button>
+        </div>
+    </EditForm>
+</div>
+
+<style>
+    .movie-form-container {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    .movie-form {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-title {
+        color: #2c3e50;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 2px solid #ecf0f1;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+
+    .form-control-file {
+        border: 2px dashed #bdc3c7;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        padding: 12px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-secondary {
+        border: 2px solid #95a5a6;
+        color: #95a5a6;
+        padding: 12px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #95a5a6;
+        color: #ffffff;
+    }
+
+    .img-preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .validation-message {
+        color: #e74c3c;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+
+    @@media (max-width: 768px) {
+        .movie-form {
+            padding: 20px;
+        }
+    }
+</style>
+
+@code {
+    [Parameter] public int? MovieId { get; set; }
+    private Movie movie = new Movie();
+    private IBrowserFile? posterImage;
+    private string imageDataUrl = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (MovieId.HasValue)
+        {
+            var existingMovie = await MovieService.GetMovieByIdAsync(MovieId.Value);
+            if (existingMovie != null)
+            {
+                movie = existingMovie;
+            }
+        }
+    }
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        if (file != null)
+        {
+            using var stream = new MemoryStream();
+            await file.OpenReadStream(maxAllowedSize: 1024 * 1024).CopyToAsync(stream);
+            var fileBytes = stream.ToArray();
+            imageDataUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
+            posterImage = e.File;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (MovieId.HasValue)
+        {
+            await MovieService.UpdateMovieAsync(movie, posterImage);
+        }
+        else
+        {
+            await MovieService.AddMovieAsync(movie, posterImage);
+        }
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

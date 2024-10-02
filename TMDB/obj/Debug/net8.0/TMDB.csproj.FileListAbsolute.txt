@@ -6,6 +6,7 @@
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/TMDB.runtimeconfig.json
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/TMDB.dll
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/TMDB.pdb
+/home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Dapper.dll
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Humanizer.dll
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
 /home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
@@ -84,6 +85,7 @@
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.AssemblyInfo.cs
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.csproj.CoreCompileInputs.cache
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.MvcApplicationPartsAssemblyInfo.cache
+/home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.sourcelink.json
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/staticwebassets.build.json
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/staticwebassets.development.json
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/staticwebassets/msbuild.TMDB.Microsoft.AspNetCore.StaticWebAssets.props
@@ -101,5 +103,3 @@
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.pdb
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.genruntimeconfig.cache
 /home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/ref/TMDB.dll
-/home/mohammedyachou/Desktop/Test/TMDB/bin/Debug/net8.0/Dapper.dll
-/home/mohammedyachou/Desktop/Test/TMDB/obj/Debug/net8.0/TMDB.sourcelink.json

@@ -1,1 +1,31 @@
-﻿
+﻿ @inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+ <nav class="navbar navbar-expand-lg justify-content-between">
+        <div class="navbar-brand ml-3">
+            <img src="@UriHelper.ToAbsoluteUri($"logo/tmdb_logo.svg")" alt="logo" width="154" height="20">
+        </div>
+        <div class="mr-3">
+            @* <button class="btn custom-btn mr-2">Favorites</button>
+            <button class="btn custom-btn mr-2">Contact Us</button>
+            <button class="btn custom-btn">Log Out - johntheram</button> *@
+        </div>
+</nav>
+
+<style>
+        /* Navbar background color */
+    .navbar {
+        background-color: #0d253f;
+    }
+
+    /* Custom button styling */
+    .custom-btn {
+        background-color: #01b4e4;
+        color: white;
+        border-color: #01b4e4;
+    }
+
+    /* Margin adjustments for the logo and buttons */
+    .navbar-brand {
+        margin-left: 15px;
+        /* Adjust the left margin for the logo */
+    }
+</style>

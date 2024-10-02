@@ -22,6 +22,18 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/mohammedyachou/Desktop/Test/TMDB/Components/MovieForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Nb3ZpZUZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/mohammedyachou/Desktop/Test/TMDB/Components/Pages/AddMovie.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZGRNb3ZpZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/mohammedyachou/Desktop/Test/TMDB/Components/Pages/EditMovie.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FZGl0TW92aWUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/mohammedyachou/Desktop/Test/TMDB/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

@@ -1,47 +1,94 @@
 ﻿@page "/"
 @inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 @rendermode InteractiveServer
 @inject IMovieService MovieService
 
 <PageTitle>Home</PageTitle>
-
-<div>
-    <nav class="navbar navbar-expand-lg justify-content-between">
-        <div class="navbar-brand ml-3">
-            <img src="@UriHelper.ToAbsoluteUri($"logo/tmdb_logo.svg")" alt="logo" width="154" height="20">
+<div class="container">
+    <div class="filters">
+        <div class="row">
+            <div>
+                <input type="text" class="form-control border-bottom-only" @oninput="OnSearchChanged"
+                    placeholder="Search">
+            </div>
         </div>
-        <div class="mr-3">
-            <button class="btn custom-btn mr-2">Favorites</button>
-            <button class="btn custom-btn mr-2">Contact Us</button>
-            <button class="btn custom-btn">Log Out - johntheram</button>
-        </div>
-    </nav>
-
-    <div class="input-group mt-4">
-        <input type="text" class="form-control" placeholder="Search" @bind="SearchTerm">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @onclick="SearchMovies">
-                <i class="fas fa-search"></i> <!-- FontAwesome search icon -->
-            </button>
+        <br />
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="date" class="form-control" @bind="StartDate">
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control" @bind="EndDate">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-outline-primary" @onclick="FilterByDate">Filter by Date</button>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" @onchange="FilterByLike">
+                    <option value="">All Movies</option>
+                    <option value="true">Liked</option>
+                    <option value="false">Not Liked</option>
+                </select>
+            </div>
         </div>
     </div>
 
-    <h2 class="mt-4">Popular Movies</h2>
+    <h2 class="">Movies <button type="button" @onclick="AddMovie" class="btn btn-primary">+</button></h2>
+    <br />
 
     <div class="row">
         @if (movies?.Any() == true)
         {
             @foreach (var movie in movies)
             {
-                <div class="col-md-2 mb-4">
-                    <div class="card">
-                        <img src="@UriHelper.ToAbsoluteUri($"images/01.jpg")" class="card-img-top" alt="@movie.Title">
-                        <div class="card-body">
-                            <h5 class="card-title">@movie.Title</h5>
-                            <p class="card-text">@movie.ReleaseDate.ToShortDateString()</p>
-                            <button class="btn @(movie.IsLiked ? "btn-success" : "btn-primary") btn-sm">
-                                @(movie.IsLiked ? "Liked" : "Like")
-                            </button>
+                <div class="col-md-4 col-sm-6 movie-card-margin">
+                    <div class="movie-card">
+                        <img src="@(string.IsNullOrEmpty(movie.PosterPath) ? UriHelper.ToAbsoluteUri($"images/01.jpg") : UriHelper.ToAbsoluteUri(movie.PosterPath))"
+                            class="movie-poster" alt="@movie.Title">
+                        <div class="movie-info">
+                            <h5 class="movie-title">@movie.Title <i class="fas fa-play play-trailer"
+                                    @onclick="()=>PlayTrailer(movie.TrailerUrl)" data-toggle="tooltip" data-placement="bottom"
+                                    title="Play Trailer"></i></h5>
+                            <p class="movie-year">@movie.ReleaseDate.ToString("yyyy")</p>
+                            <div class="movie-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    var ratingOnFiveStarScale = movie.Rating / 2;
+                                    var starValue = (decimal)i;
+
+                                    if (ratingOnFiveStarScale >= starValue)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    else if (ratingOnFiveStarScale >= starValue - 0.5m)
+                                    {
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
+                                }
+                                <span class="ms-1">@movie.Rating</span>
+                            </div>
+                            <p>@movie.Runtime Min | @movie.Country</p>
+                            <p class="movie-overview">@movie.Overview</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <button class="btn @(movie.IsLiked ? "btn-success" : "btn-outline-primary") btn-sm"
+                                    @onclick="() => ToggleLike(movie)">
+                                    @(movie.IsLiked ? "Liked" : "Like")
+                                </button>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => EditMovie(movie.MovieId)">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteMovie(movie.MovieId)">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -53,67 +100,130 @@
         }
     </div>
 </div>
-
-
 <style>
-/* Navbar background color */
-.navbar {
-    background-color: #0d253f;
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
 
-/* Custom button styling */
-.custom-btn {
-    background-color: #01b4e4;
-    color: white;
-    border-color: #01b4e4;
-}
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-/* Margin adjustments for the logo and buttons */
-.navbar-brand {
-    margin-left: 15px; /* Adjust the left margin for the logo */
-}
+    .filters {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
 
-.row{
-    margin-right: 15px;
-    margin-left: 15px;
-}
-.navbar .mr-3 {
-    margin-right: 15px; /* Adjust the right margin after the last button */
-}
+    .movie-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
 
-/* Ensure the cards behave as required */
-.card {
-    transition: transform 0.2s;
-    height: 100%;
-}
+    .movie-card-margin {
+        margin-bottom: 20px;
+    }
 
-.card:hover {
-    transform: scale(1.05);
-}
+    .movie-card:hover {
+        transform: translateY(-5px);
+    }
 
-.card-img-top {
-    height: 300px;
-    object-fit: cover;
-}
+    .movie-poster {
+        height: 300px;
+        object-fit: cover;
+        width: 100%;
+    }
 
-.card-title {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-}
+    .movie-info {
+        padding: 15px;
+    }
 
-.card-text {
-    font-size: 0.8rem;
-    color: #6c757d;
-}
+    .movie-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
 
+    .movie-year {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .movie-rating {
+        margin-top: 10px;
+    }
+
+    .movie-overview {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .btn-like {
+        background-color: #e0e0e0;
+        color: #333;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-like.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .border-bottom-only {
+        border: none;
+        border-bottom: 2px solid #0d253f;
+        border-radius: 0;
+        outline: none;
+    }
+
+    .border-bottom-only:focus {
+        box-shadow: none;
+        border-bottom-color: #01b4e4;
+    }
+
+    .play-trailer {
+        padding-left: 10px;
+        color: #01b4e4;
+    }
 </style>
+
+<script>
+    function openTrailer(trailerUrl) {
+        window.open(trailerUrl, '_blank');
+    }
+</script>
+
 @code {
     public List<Movie> movies = new List<Movie>();
     public string SearchTerm { get; set; } = string.Empty;
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    private string LikedFilter { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
-        movies = await MovieService.GetAllMoviesAsync(); 
+        movies = await MovieService.GetAllMoviesAsync();
     }
     private async Task SearchMovies()
     {
@@ -126,10 +236,65 @@
             movies = await MovieService.GetAllMoviesAsync();
         }
     }
+    private void AddMovie()
+    {
+        NavigationManager.NavigateTo("/add-movie");
+    }
 
     private async Task OnSearchChanged(ChangeEventArgs e)
     {
-        SearchTerm = e.Value?.ToString(); // Update the search term based on user input
-        await SearchMovies(); // Trigger the search when the input changes
-    } 
+        SearchTerm = e.Value?.ToString() ?? string.Empty;
+        await SearchMovies();
+    }
+
+
+    private void EditMovie(int movieId)
+    {
+        NavigationManager.NavigateTo($"/edit-movie/{movieId}");
+    }
+
+    private async Task DeleteMovie(int movieId)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this movie?"))
+        {
+            await MovieService.DeleteMovieAsync(movieId);
+            await SearchMovies();
+        }
+    }
+    private async void PlayTrailer(string trailerUrl)
+    {
+        await JS.InvokeVoidAsync("openTrailer", trailerUrl);
+    }
+
+    private async void ToggleLike(Movie movie)
+    {
+        movie.IsLiked = !movie.IsLiked;
+        await MovieService.UpdateMovieAsync(movie, null);
+    }
+
+    private async Task FilterByDate()
+    {
+        if (StartDate.HasValue && EndDate.HasValue)
+        {
+            movies = await MovieService.GetMoviesByDateRangeAsync(StartDate.Value, EndDate.Value);
+        }
+        else
+        {
+            movies = await MovieService.GetAllMoviesAsync();
+        }
+    }
+
+    private async Task FilterByLike(ChangeEventArgs e)
+    {
+        var value = e.Value?.ToString();
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            movies = await MovieService.GetMoviesByLikeAsync(value);
+        }
+        else
+        {
+            movies = await MovieService.GetAllMoviesAsync();
+        }
+    }
 }

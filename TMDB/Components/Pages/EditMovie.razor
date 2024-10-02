@@ -1,0 +1,9 @@
+@page "/edit-movie/{MovieId:int}"
+
+<PageTitle>Edit Movie</PageTitle>
+
+<MovieForm MovieId="@MovieId" />
+
+@code {
+    [Parameter] public int MovieId { get; set; }
+}
